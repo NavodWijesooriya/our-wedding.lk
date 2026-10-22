@@ -4,6 +4,11 @@
   :root {
     --background: #fdfbf7;
     --foreground: #1c1917;
+    --font-playfair: 'Playfair Display', Georgia, serif;
+    --font-cormorant: 'Cormorant Garamond', Garamond, serif;
+    --font-cinzel: 'Cinzel', 'Times New Roman', serif;
+    --font-montserrat: 'Montserrat', sans-serif;
+    --font-jakarta: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 }
 
