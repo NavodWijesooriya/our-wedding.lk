@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { Heart, Sparkles, Lock, Mail, ArrowRight } from 'lucide-react';
+import { Heart, Sparkles, Lock, Mail, ArrowRight, UserPlus } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -62,16 +62,29 @@ export default function LoginPage() {
           </span>
         </Link>
         <h2 className="text-2xl font-serif font-bold text-stone-900">Sign in to your account</h2>
-        <p className="mt-1 text-xs text-stone-500">
-          Or{' '}
-          <Link href="/register" className="font-semibold text-rose-600 hover:text-rose-500 underline">
-            create a new account for free
+        <p className="mt-1 text-sm text-stone-600">
+          New here?{' '}
+          <Link href="/register" className="font-bold text-rose-600 hover:text-rose-700 underline underline-offset-2">
+            Create a new account for free &rarr;
           </Link>
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4">
         <div className="bg-white py-8 px-6 shadow-xl rounded-3xl border border-stone-200/80 sm:px-10 space-y-6">
+          {/* Quick Tab Switcher between Sign In & Create Account */}
+          <div className="grid grid-cols-2 p-1 bg-stone-100 rounded-2xl border border-stone-200">
+            <div className="py-2.5 text-center text-xs font-bold text-stone-900 bg-white rounded-xl shadow-xs">
+              Sign In
+            </div>
+            <Link
+              href="/register"
+              className="py-2.5 text-center text-xs font-semibold text-stone-500 hover:text-rose-600 hover:bg-stone-50 rounded-xl transition"
+            >
+              Create Account
+            </Link>
+          </div>
+
           {/* Quick Demo Access Button */}
           <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200/80 text-center space-y-2">
             <span className="text-xs font-semibold text-amber-800 flex items-center justify-center gap-1.5">
@@ -152,6 +165,28 @@ export default function LoginPage() {
               Sign In
             </Button>
           </form>
+
+          {/* Prominent Sign Up & Create New Account Callout */}
+          <div className="pt-5 border-t border-stone-200 text-center space-y-3">
+            <p className="text-xs font-medium text-stone-500">
+              Don&apos;t have an account yet?
+            </p>
+            <Link href="/register" className="block w-full">
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                className="w-full border-2 border-rose-200 bg-rose-50/50 hover:bg-rose-100 hover:border-rose-300 text-rose-700 font-bold transition shadow-xs py-3"
+                leftIcon={<UserPlus className="w-4 h-4 text-rose-600" />}
+                rightIcon={<ArrowRight className="w-4 h-4 text-rose-500" />}
+              >
+                Sign Up &amp; Create New Account
+              </Button>
+            </Link>
+            <p className="text-[11px] text-stone-400">
+              Free registration • Design &amp; publish your wedding website
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -66,7 +66,7 @@ export function DashboardNavbar() {
             {isFirebaseConnected ? (
               <span className="flex items-center gap-1.5 text-emerald-700 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Firebase Cloud Connected (Auth & Cloud Firestore Active)
+                 Cloud Connected (Auth & Cloud Active)
               </span>
             ) : (
               <span className="flex items-center gap-1.5 text-amber-700 font-medium">

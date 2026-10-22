@@ -65,16 +65,29 @@ export default function RegisterPage() {
           </span>
         </Link>
         <h2 className="text-2xl font-serif font-bold text-stone-900">Create your free account</h2>
-        <p className="mt-1 text-xs text-stone-500">
+        <p className="mt-1 text-sm text-stone-600">
           Already have an account?{' '}
-          <Link href="/login" className="font-semibold text-rose-600 hover:text-rose-500 underline">
-            Sign in
+          <Link href="/login" className="font-bold text-rose-600 hover:text-rose-700 underline underline-offset-2">
+            Sign in &rarr;
           </Link>
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4">
         <div className="bg-white py-8 px-6 shadow-xl rounded-3xl border border-stone-200/80 sm:px-10 space-y-6">
+          {/* Quick Tab Switcher */}
+          <div className="grid grid-cols-2 p-1 bg-stone-100 rounded-2xl border border-stone-200">
+            <Link
+              href="/login"
+              className="py-2.5 text-center text-xs font-semibold text-stone-500 hover:text-rose-600 hover:bg-stone-50 rounded-xl transition"
+            >
+              Sign In
+            </Link>
+            <div className="py-2.5 text-center text-xs font-bold text-stone-900 bg-white rounded-xl shadow-xs">
+              Create Account
+            </div>
+          </div>
+
           {error && (
             <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
               {error}
@@ -132,6 +145,15 @@ export default function RegisterPage() {
               Get Started Free
             </Button>
           </form>
+
+          <div className="pt-4 border-t border-stone-200 text-center space-y-2">
+            <p className="text-xs text-stone-500">
+              Already registered an account?{' '}
+              <Link href="/login" className="font-bold text-rose-600 hover:text-rose-700 underline">
+                Log in here
+              </Link>
+            </p>
+          </div>
 
           <p className="text-[11px] text-stone-400 text-center leading-relaxed">
             By registering, you agree to create and manage personal wedding invitation websites
