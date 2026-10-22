@@ -32,8 +32,13 @@ export function DashboardNavbar() {
   const pathname = usePathname();
   const { user, logout, isFirebaseConnected } = useAuth();
 
+  const isDemoUser =
+    user?.uid === 'demo-user-123' ||
+    user?.email?.toLowerCase() === 'demo@weddinginvites.com';
+
   const isAdmin =
-    user?.role === 'admin' || user?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    !isDemoUser &&
+    (user?.role === 'admin' || user?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase());
 
   const baseNavLinks: NavItem[] = [
     { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
@@ -81,6 +86,10 @@ export function DashboardNavbar() {
             {isAdmin ? (
               <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 text-[10px] font-bold uppercase tracking-wider">
                 System Admin
+              </span>
+            ) : isDemoUser ? (
+              <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-wider">
+                Demo User
               </span>
             ) : (
               <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-wider">

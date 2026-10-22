@@ -50,9 +50,17 @@ export default function AdminDashboardPage() {
         router.push('/login');
         return;
       }
-      if (user.role !== 'admin' && user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
-        toastError('Access Denied', 'You do not have administrative privileges.');
+      const isDemoUser =
+        user.uid === 'demo-user-123' ||
+        user.email?.toLowerCase() === 'demo@weddinginvites.com';
+      const isRealAdmin =
+        !isDemoUser &&
+        (user.role === 'admin' || user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+
+      if (!isRealAdmin) {
+        toastError('Access Denied', 'The Admin Approvals section is only accessible to the system administrator.');
         router.push('/dashboard');
+        return;
       }
     }
   }, [user, authLoading, router, toastError]);
