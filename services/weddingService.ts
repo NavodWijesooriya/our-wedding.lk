@@ -10,7 +10,7 @@ import {
   where,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db, isFirebaseConfigured } from '@/lib/firebase';
+import { auth, db, isFirebaseConfigured } from '@/lib/firebase';
 import { WeddingProject, WeddingDetails, WeddingThemeConfig, WeddingTemplateId } from '@/types/wedding';
 import { INITIAL_DEMO_WEDDINGS, WEDDING_TEMPLATES } from '@/lib/mockData';
 import { slugify } from '@/lib/utils';
@@ -38,6 +38,12 @@ function saveLocalWeddings(weddings: WeddingProject[]) {
 }
 
 export async function getWeddingsByUser(userId: string): Promise<WeddingProject[]> {
+  // If demo user or not signed into Firebase Auth, use local storage directly
+  if (userId === 'demo-user-123' || !auth?.currentUser) {
+    const list = getLocalWeddings();
+    return list.filter((w) => w.userId === userId || userId === 'demo-user-123');
+  }
+
   if (isFirebaseConfigured && db) {
     try {
       const q = query(collection(db, 'weddings'), where('userId', '==', userId));
@@ -47,8 +53,10 @@ export async function getWeddingsByUser(userId: string): Promise<WeddingProject[
         list.push({ id: d.id, ...(d.data() as Omit<WeddingProject, 'id'>) });
       });
       return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    } catch (err) {
-      console.warn('Error fetching weddings from Firestore, falling back to local storage:', err);
+    } catch (err: any) {
+      if (err?.code !== 'permission-denied') {
+        console.warn('Error fetching weddings from Firestore, falling back to local storage:', err);
+      }
     }
   }
 
@@ -57,14 +65,23 @@ export async function getWeddingsByUser(userId: string): Promise<WeddingProject[
 }
 
 export async function getWeddingById(id: string): Promise<WeddingProject | null> {
+  // If demo wedding or not signed into Firebase Auth, check local storage first
+  if (id.startsWith('demo-') || !auth?.currentUser) {
+    const list = getLocalWeddings();
+    const local = list.find((w) => w.id === id);
+    if (local) return local;
+  }
+
   if (isFirebaseConfigured && db) {
     try {
       const snap = await getDoc(doc(db, 'weddings', id));
       if (snap.exists()) {
         return { id: snap.id, ...(snap.data() as Omit<WeddingProject, 'id'>) };
       }
-    } catch (err) {
-      console.warn('Error fetching wedding by id from Firestore:', err);
+    } catch (err: any) {
+      if (err?.code !== 'permission-denied') {
+        console.warn('Error fetching wedding by id from Firestore:', err);
+      }
     }
   }
 

@@ -9,7 +9,7 @@ import {
   orderBy,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db, isFirebaseConfigured, ADMIN_EMAIL } from '@/lib/firebase';
+import { auth, db, isFirebaseConfigured, ADMIN_EMAIL } from '@/lib/firebase';
 import { UserProfile, UserApprovalStatus } from '@/types/auth';
 
 const LOCAL_USERS_KEY = 'wedding_platform_registered_users';
@@ -35,7 +35,7 @@ export function saveLocalUsers(users: UserProfile[]): void {
  * Fetch all registered users for the Admin Dashboard
  */
 export async function getAllUsers(): Promise<UserProfile[]> {
-  if (isFirebaseConfigured && db) {
+  if (isFirebaseConfigured && db && auth?.currentUser) {
     try {
       const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
       const snap = await getDocs(q);
@@ -55,8 +55,10 @@ export async function getAllUsers(): Promise<UserProfile[]> {
         });
       });
       return list;
-    } catch (err) {
-      console.warn('Error fetching users from Firestore, falling back to local users:', err);
+    } catch (err: any) {
+      if (err?.code !== 'permission-denied') {
+        console.warn('Error fetching users from Firestore, falling back to local users:', err);
+      }
     }
   }
 

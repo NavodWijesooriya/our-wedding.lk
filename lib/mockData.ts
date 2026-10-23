@@ -117,7 +117,7 @@ export const WEDDING_TEMPLATES: TemplateDefinition[] = [
     tagline: 'Water-lily serenity, blush petals & modern elegance',
     description: 'Delicate falling lotus petals, serene botanical water-lily framing, and contemporary luxury typography for tranquil outdoor and tropical celebrations.',
     badge: 'Botanical Serenity',
-    previewImage: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1200&q=80',
+    previewImage: '/images/templates/lotus-blossom.jpg',
     primaryColor: '#047857',
     accentColor: '#f0fdf4',
     font: 'playfair',

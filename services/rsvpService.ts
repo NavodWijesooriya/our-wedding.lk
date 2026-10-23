@@ -8,7 +8,7 @@ import {
   orderBy,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db, isFirebaseConfigured } from '@/lib/firebase';
+import { auth, db, isFirebaseConfigured } from '@/lib/firebase';
 import { RsvpResponse, RsvpStats, AttendanceStatus } from '@/types/rsvp';
 import { INITIAL_DEMO_RSVPS } from '@/lib/mockData';
 
@@ -35,6 +35,12 @@ function saveLocalRsvps(list: RsvpResponse[]) {
 }
 
 export async function getRsvpsByWedding(weddingId: string): Promise<RsvpResponse[]> {
+  // If demo wedding, or not signed in to Firebase Auth, read local storage directly
+  if (weddingId.startsWith('demo-') || !auth?.currentUser) {
+    const list = getLocalRsvps();
+    return list.filter((r) => r.weddingId === weddingId);
+  }
+
   if (isFirebaseConfigured && db) {
     try {
       const colRef = collection(db, 'weddings', weddingId, 'rsvps');
@@ -45,8 +51,10 @@ export async function getRsvpsByWedding(weddingId: string): Promise<RsvpResponse
         list.push({ id: d.id, ...(d.data() as Omit<RsvpResponse, 'id'>) });
       });
       return list;
-    } catch (err) {
-      console.warn('Error fetching RSVPs from Firestore:', err);
+    } catch (err: any) {
+      if (err?.code !== 'permission-denied') {
+        console.warn('Error fetching RSVPs from Firestore:', err);
+      }
     }
   }
 
