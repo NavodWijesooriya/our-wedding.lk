@@ -12,6 +12,7 @@ import { MandalaLotusTemplate } from './MandalaLotusTemplate';
 import { CeylonHeritageTemplate } from './CeylonHeritageTemplate';
 import { LotusBlossomTemplate } from './LotusBlossomTemplate';
 import { EnvelopeOpener } from './common/EnvelopeOpener';
+import { GuestControlDock } from './common/GuestControlDock';
 import { formatDate } from '@/lib/utils';
 
 interface TemplateRendererProps {
@@ -57,6 +58,12 @@ export function TemplateRenderer({ wedding, isLivePreview = false }: TemplateRen
         />
       )}
       {renderTemplate()}
+      {!isLivePreview && (
+        <GuestControlDock
+          wedding={wedding}
+          primaryColor={wedding.themeConfig?.primaryColor}
+        />
+      )}
     </>
   );
 }
