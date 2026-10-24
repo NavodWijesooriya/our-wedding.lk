@@ -382,8 +382,8 @@ export default function HomePage() {
           </span>
         </div>
         <p className="font-light">
-  An elegant, customizable platform for couples to design and share their perfect digital wedding invitations seamlessly.
-</p>
+          A modern full-stack multi-user wedding invitation website platform built with Next.js & Firebase.
+        </p>
         <p className="text-[11px] text-stone-400">
           © 2026 EternalTie. All rights reserved.
         </p>

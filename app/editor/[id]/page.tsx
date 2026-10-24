@@ -14,12 +14,14 @@ import { GalleryTab } from '@/components/editor/tabs/GalleryTab';
 import { DesignTab } from '@/components/editor/tabs/DesignTab';
 import { MusicTab } from '@/components/editor/tabs/MusicTab';
 import { SectionsTab } from '@/components/editor/tabs/SectionsTab';
+import { GuestsTab } from '@/components/editor/tabs/GuestsTab';
 import { PublishTab } from '@/components/editor/tabs/PublishTab';
 import { LivePreviewFrame } from '@/components/editor/LivePreviewFrame';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { Button } from '@/components/ui/Button';
 import {
   User,
+  Users,
   MapPin,
   Heart,
   ImageIcon,
@@ -42,6 +44,7 @@ type EditorTab =
   | 'design'
   | 'music'
   | 'sections'
+  | 'guests'
   | 'publish';
 
 function WeddingEditorContent() {
@@ -242,6 +245,7 @@ function WeddingEditorContent() {
     { id: 'design', label: 'Design', icon: Palette },
     { id: 'music', label: 'Music', icon: Music },
     { id: 'sections', label: 'Sections', icon: Layers },
+    { id: 'guests', label: 'Guests & WhatsApp', icon: Users },
     { id: 'publish', label: 'Publish', icon: Globe },
   ];
 
@@ -353,6 +357,9 @@ function WeddingEditorContent() {
                 )}
                 {activeTab === 'sections' && (
                   <SectionsTab wedding={wedding} onChangeDetails={handleDetailsChange} />
+                )}
+                {activeTab === 'guests' && (
+                  <GuestsTab wedding={wedding} />
                 )}
                 {activeTab === 'publish' && (
                   <PublishTab

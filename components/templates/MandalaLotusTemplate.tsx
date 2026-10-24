@@ -9,6 +9,7 @@ import { PhotoLightbox } from './common/PhotoLightbox';
 import { AddToCalendar } from './common/AddToCalendar';
 import { SocialShare } from './common/SocialShare';
 import { AnimatedSection } from './common/AnimatedSection';
+import { GuestbookWall } from './common/GuestbookWall';
 import { motion, AnimatePresence } from 'motion/react';
 import { formatDate } from '@/lib/utils';
 import {
@@ -25,9 +26,12 @@ import {
   ChevronDown
 } from 'lucide-react';
 
+import { WeddingGuest } from '@/types/rsvp';
+
 interface TemplateProps {
   wedding: WeddingProject;
   isLivePreview?: boolean;
+  guest?: WeddingGuest | null;
 }
 
 // Sacred Sri Lankan Mandala SVG Motif
@@ -175,7 +179,7 @@ function FloatingGoldenDust() {
   );
 }
 
-export function MandalaLotusTemplate({ wedding }: TemplateProps) {
+export function MandalaLotusTemplate({ wedding, isLivePreview = false, guest }: TemplateProps) {
   const { details, themeConfig } = wedding;
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [lang, setLang] = useState<'si' | 'en'>('en');
@@ -281,20 +285,38 @@ export function MandalaLotusTemplate({ wedding }: TemplateProps) {
 
           <div className="max-w-4xl mx-auto relative z-20 space-y-6 pt-16 sm:pt-24">
             {/* Cultural Blessing Capsule */}
-            <motion.div
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-[#f3e7d0]/90 border border-[#b98a2f]/50 text-[#7a5518] text-xs sm:text-sm font-sans tracking-[0.2em] shadow-sm uppercase"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#b98a2f]" />
-              <span>
-                {lang === 'si'
-                  ? details.culturalBlessing || 'සාදර ඇරයුමයි! • දෙමාපිය ආශිර්වාදය මැද'
-                  : 'Together With Their Families'}
-              </span>
-              <Sparkles className="w-3.5 h-3.5 text-[#b98a2f]" />
-            </motion.div>
+            <div className="flex flex-col items-center gap-2.5">
+              <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+                className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-[#f3e7d0]/90 border border-[#b98a2f]/50 text-[#7a5518] text-xs sm:text-sm font-sans tracking-[0.2em] shadow-sm uppercase"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#b98a2f]" />
+                <span>
+                  {lang === 'si'
+                    ? details.culturalBlessing || 'සාදර ඇරයුමයි! • දෙමාපිය ආශිර්වාදය මැද'
+                    : 'Together With Their Families'}
+                </span>
+                <Sparkles className="w-3.5 h-3.5 text-[#b98a2f]" />
+              </motion.div>
+
+              {/* Personalized Guest Badge */}
+              {guest && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-100/90 border border-[#b98a2f] text-[#5e4113] text-xs font-serif font-bold shadow-xs"
+                >
+                  <Heart className="w-3 h-3 text-[#b98a2f] fill-[#b98a2f] animate-pulse" />
+                  <span>
+                    {lang === 'si'
+                      ? `ගෞරවනීය ආරාධනය: ${guest.name}`
+                      : `Specially Honored Guest: ${guest.name}`}
+                  </span>
+                </motion.div>
+              )}
+            </div>
 
             {/* Couple Photo in Kandyan Arched Gold Frame */}
             {details.heroImage && (
@@ -721,6 +743,14 @@ export function MandalaLotusTemplate({ wedding }: TemplateProps) {
         </AnimatedSection>
       )}
 
+      {/* Guestbook Wall */}
+      <GuestbookWall
+        coupleNames={coupleNames}
+        primaryColor="#b98a2f"
+        accentColor="#f7eedc"
+        isDark={false}
+      />
+
       {/* RSVP Section */}
       {details.showRsvp && (
         <section id="rsvp" className="py-20 sm:py-28 px-4 sm:px-8 max-w-3xl mx-auto relative z-20">
@@ -750,6 +780,7 @@ export function MandalaLotusTemplate({ wedding }: TemplateProps) {
               coupleNames={coupleNames}
               primaryColor="#b98a2f"
               themeStyle="luxury"
+              guest={guest}
             />
           </div>
         </section>

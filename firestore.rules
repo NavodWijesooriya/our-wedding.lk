@@ -100,6 +100,26 @@ service cloud.firestore {
           get(/databases/$(database)/documents/weddings/$(weddingId)).data.userId == request.auth.uid
         );
       }
+
+      // 4. Personalized Wedding Guests Subcollection
+      match /guests/{guestId} {
+        // Public guests can read their personalized invite details
+        allow read: if true;
+
+        // Wedding owner or admin can create and delete guests
+        allow create, delete: if isAuthenticated() && (
+          isAdmin() ||
+          get(/databases/$(database)/documents/weddings/$(weddingId)).data.userId == request.auth.uid
+        );
+
+        // Wedding owner/admin can update all; or guests can update RSVP status & guestCount
+        allow update: if (isAuthenticated() && (
+          isAdmin() ||
+          get(/databases/$(database)/documents/weddings/$(weddingId)).data.userId == request.auth.uid
+        )) || (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'guestCount', 'notes', 'respondedAt', 'updatedAt'])
+        );
+      }
     }
   }
 }

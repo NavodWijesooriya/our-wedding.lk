@@ -10,15 +10,19 @@ import { PhotoLightbox } from './common/PhotoLightbox';
 import { AddToCalendar } from './common/AddToCalendar';
 import { SocialShare } from './common/SocialShare';
 import { AnimatedSection } from './common/AnimatedSection';
+import { GuestbookWall } from './common/GuestbookWall';
 import { formatDate } from '@/lib/utils';
 import { Moon, Star, MapPin, Calendar, Clock, Navigation, Heart } from 'lucide-react';
+
+import { WeddingGuest } from '@/types/rsvp';
 
 interface TemplateProps {
   wedding: WeddingProject;
   isLivePreview?: boolean;
+  guest?: WeddingGuest | null;
 }
 
-export function ModernDarkTemplate({ wedding }: TemplateProps) {
+export function ModernDarkTemplate({ wedding, isLivePreview = false, guest }: TemplateProps) {
   const { details, themeConfig } = wedding;
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -341,6 +345,16 @@ export function ModernDarkTemplate({ wedding }: TemplateProps) {
         </AnimatedSection>
       )}
 
+      {/* Guestbook Wall */}
+      <AnimatedSection animation="fade-up">
+        <GuestbookWall
+          coupleNames={coupleNames}
+          primaryColor="#d97706"
+          accentColor="#292524"
+          isDark={true}
+        />
+      </AnimatedSection>
+
       {/* RSVP */}
       {details.showRsvp && (
         <AnimatedSection animation="fade-up" id="rsvp">
@@ -350,6 +364,7 @@ export function ModernDarkTemplate({ wedding }: TemplateProps) {
               coupleNames={coupleNames}
               primaryColor={themeConfig.primaryColor || '#d97706'}
               themeStyle="dark"
+              guest={guest}
             />
           </section>
         </AnimatedSection>

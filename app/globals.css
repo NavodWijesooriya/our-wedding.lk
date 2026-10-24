@@ -9,7 +9,16 @@
     --font-cinzel: 'Cinzel', 'Times New Roman', serif;
     --font-montserrat: 'Montserrat', sans-serif;
     --font-jakarta: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-script: 'Alex Brush', cursive;
+    --font-calligraphy: 'Great Vibes', cursive;
   }
+}
+
+.font-script {
+  font-family: var(--font-script), 'Alex Brush', cursive;
+}
+.font-calligraphy {
+  font-family: var(--font-calligraphy), 'Great Vibes', cursive;
 }
 
 .font-playfair {
@@ -101,4 +110,25 @@ html {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(212, 175, 55, 0.3);
   box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(212, 175, 55, 0.2) inset;
+}
+
+@keyframes spinRecord {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-record {
+  animation: spinRecord 14s linear infinite;
+}
+
+@keyframes swayPetal {
+  0% { transform: translate(0, -20px) rotate(0deg); opacity: 0; }
+  15% { opacity: 0.8; }
+  50% { transform: translate(25px, 50vh) rotate(180deg); opacity: 0.9; }
+  85% { opacity: 0.7; }
+  100% { transform: translate(-15px, 105vh) rotate(360deg); opacity: 0; }
+}
+
+.petal-sway {
+  animation: swayPetal 12s linear infinite;
 }

@@ -9,16 +9,20 @@ import { PhotoLightbox } from './common/PhotoLightbox';
 import { AddToCalendar } from './common/AddToCalendar';
 import { SocialShare } from './common/SocialShare';
 import { AnimatedSection } from './common/AnimatedSection';
+import { GuestbookWall } from './common/GuestbookWall';
 import { motion } from 'motion/react';
 import { formatDate } from '@/lib/utils';
 import { Crown, Sparkles, MapPin, Calendar, Clock, Navigation, Heart } from 'lucide-react';
 
+import { WeddingGuest } from '@/types/rsvp';
+
 interface TemplateProps {
   wedding: WeddingProject;
   isLivePreview?: boolean;
+  guest?: WeddingGuest | null;
 }
 
-export function LuxuryGoldTemplate({ wedding }: TemplateProps) {
+export function LuxuryGoldTemplate({ wedding, isLivePreview = false, guest }: TemplateProps) {
   const { details, themeConfig } = wedding;
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -361,6 +365,14 @@ export function LuxuryGoldTemplate({ wedding }: TemplateProps) {
         </section>
       )}
 
+      {/* Guestbook Wall */}
+      <GuestbookWall
+        coupleNames={coupleNames}
+        primaryColor="#d4af37"
+        accentColor="#2e2615"
+        isDark={true}
+      />
+
       {/* RSVP */}
       {details.showRsvp && (
         <section id="rsvp" className="py-24 px-6 border-t border-[#d4af37]/20">
@@ -369,6 +381,7 @@ export function LuxuryGoldTemplate({ wedding }: TemplateProps) {
             coupleNames={coupleNames}
             primaryColor={themeConfig.primaryColor || '#d4af37'}
             themeStyle="luxury"
+            guest={guest}
           />
         </section>
       )}

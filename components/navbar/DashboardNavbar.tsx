@@ -43,7 +43,7 @@ export function DashboardNavbar() {
   const baseNavLinks: NavItem[] = [
     { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
     { href: '/dashboard/weddings', label: 'My Weddings', icon: CalendarHeart },
-    { href: '/dashboard/rsvps', label: 'RSVP Responses', icon: Users },
+    { href: '/dashboard/rsvps', label: 'Guests & WhatsApp', icon: Users },
     { href: '/dashboard/templates', label: 'Templates', icon: Palette },
     { href: '/dashboard/settings', label: 'Settings', icon: Settings },
   ];
@@ -66,7 +66,7 @@ export function DashboardNavbar() {
             {isFirebaseConnected ? (
               <span className="flex items-center gap-1.5 text-emerald-700 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                 Cloud Connected (Auth & Cloud Active)
+                Firebase Cloud Connected (Auth & Cloud Firestore Active)
               </span>
             ) : (
               <span className="flex items-center gap-1.5 text-amber-700 font-medium">

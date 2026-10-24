@@ -1,19 +1,24 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { getWeddingBySlug } from '@/services/weddingService';
+import { getGuestByCode } from '@/services/guestService';
 import { WeddingProject } from '@/types/wedding';
+import { WeddingGuest } from '@/types/rsvp';
 import { TemplateRenderer } from '@/components/templates/TemplateRenderer';
 import { Heart, Lock, Home, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 function PublicWeddingContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const slug = params?.slug as string;
+  const guestCode = searchParams?.get('guest') || null;
 
   const [wedding, setWedding] = useState<WeddingProject | null>(null);
+  const [guest, setGuest] = useState<WeddingGuest | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,6 +27,15 @@ function PublicWeddingContent() {
       try {
         const item = await getWeddingBySlug(slug);
         setWedding(item);
+
+        if (item && guestCode) {
+          try {
+            const identifiedGuest = await getGuestByCode(item.id, guestCode);
+            setGuest(identifiedGuest);
+          } catch {
+            // Non-fatal if guest code not found
+          }
+        }
       } catch (err) {
         console.error('Failed to load wedding invitation:', err);
       } finally {
@@ -29,7 +43,7 @@ function PublicWeddingContent() {
       }
     }
     loadWedding();
-  }, [slug]);
+  }, [slug, guestCode]);
 
   if (loading) {
     return (
@@ -70,7 +84,7 @@ function PublicWeddingContent() {
     );
   }
 
-  return <TemplateRenderer wedding={wedding} isLivePreview={false} />;
+  return <TemplateRenderer wedding={wedding} isLivePreview={false} guest={guest} />;
 }
 
 export default function PublicWeddingPage() {

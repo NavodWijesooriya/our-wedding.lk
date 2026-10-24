@@ -2,17 +2,31 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, Sparkles, MailOpen } from 'lucide-react';
+import { Heart, Sparkles, MailOpen, UserCheck } from 'lucide-react';
+import { WeddingGuest } from '@/types/rsvp';
 
 interface EnvelopeOpenerProps {
   coupleNames: string;
   weddingDate: string;
   onOpen?: () => void;
+  guest?: WeddingGuest | null;
 }
 
-export function EnvelopeOpener({ coupleNames, weddingDate, onOpen }: EnvelopeOpenerProps) {
+export function EnvelopeOpener({ coupleNames, weddingDate, onOpen, guest }: EnvelopeOpenerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
+
+  // Check if previously opened in this session
+  React.useEffect(() => {
+    try {
+      const alreadyOpened = sessionStorage.getItem(`eternaltie_opened_${coupleNames}`);
+      if (alreadyOpened === 'true') {
+        setIsOpen(true);
+      }
+    } catch {
+      // ignore
+    }
+  }, [coupleNames]);
 
   // Derive couple initials for the wax seal monogram (e.g. "K & N" -> "K & N")
   const parts = coupleNames.split('&').map((s) => s.trim());
@@ -24,6 +38,12 @@ export function EnvelopeOpener({ coupleNames, weddingDate, onOpen }: EnvelopeOpe
     if (isOpening || isOpen) return;
     setIsOpening(true);
 
+    try {
+      sessionStorage.setItem(`eternaltie_opened_${coupleNames}`, 'true');
+    } catch {
+      // ignore
+    }
+
     // Dispatch global event so MusicPlayer can start audio on user gesture
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('wedding-invitation-opened'));
@@ -33,7 +53,16 @@ export function EnvelopeOpener({ coupleNames, weddingDate, onOpen }: EnvelopeOpe
 
     setTimeout(() => {
       setIsOpen(true);
-    }, 1200);
+    }, 1100);
+  };
+
+  const handleDirectSkip = () => {
+    try {
+      sessionStorage.setItem(`eternaltie_opened_${coupleNames}`, 'true');
+    } catch {
+      // ignore
+    }
+    setIsOpen(true);
   };
 
   return (
@@ -45,6 +74,15 @@ export function EnvelopeOpener({ coupleNames, weddingDate, onOpen }: EnvelopeOpe
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-[#13110f]/92 backdrop-blur-xl p-4 sm:p-6 select-none overflow-hidden"
         >
+          {/* Top-Right Direct Bypass Button */}
+          <button
+            type="button"
+            onClick={handleDirectSkip}
+            className="absolute top-5 right-5 sm:top-8 sm:right-8 z-20 flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white/90 hover:text-white text-xs font-sans tracking-wide border border-white/20 backdrop-blur-md transition cursor-pointer shadow-lg"
+          >
+            <span>Skip to Invitation</span>
+            <span className="text-amber-300 font-bold">↗</span>
+          </button>
           {/* Ambient Floating Gold Dust Particles */}
           <div className="absolute inset-0 pointer-events-none">
             {[...Array(12)].map((_, i) => (
@@ -87,13 +125,28 @@ export function EnvelopeOpener({ coupleNames, weddingDate, onOpen }: EnvelopeOpe
               <div className="absolute bottom-3.5 right-3.5 w-7 h-7 border-b-2 border-r-2 border-[#d4af37]/70 rounded-br-sm" />
 
               {/* Sub-header Monogram Ribbon */}
-              <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-amber-50/80 border border-amber-200/60 shadow-2xs">
+              <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-amber-50/80 border border-amber-200/60 shadow-2xs">
                 <Sparkles className="w-3 h-3 text-amber-600" />
                 <span className="text-[10px] sm:text-xs uppercase tracking-[0.28em] text-[#9a7322] font-semibold">
                   You Are Cordially Invited
                 </span>
                 <Sparkles className="w-3 h-3 text-amber-600" />
               </div>
+
+              {/* Personalized Guest Badge if opened via personal link */}
+              {guest && (
+                <div className="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-50 border border-rose-200/80 shadow-2xs">
+                  <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
+                  <span className="text-xs font-serif font-bold text-rose-900">
+                    Prepared with love for {guest.name}
+                  </span>
+                  {guest.seatsAllocated > 1 && (
+                    <span className="text-[10px] text-rose-600 font-sans font-medium">
+                      • {guest.seatsAllocated} Seats
+                    </span>
+                  )}
+                </div>
+              )}
 
               {/* 3D Wax Seal with Monogram & Interactive Pulse */}
               <div className="relative my-4 flex justify-center">
@@ -145,6 +198,14 @@ export function EnvelopeOpener({ coupleNames, weddingDate, onOpen }: EnvelopeOpe
                 <MailOpen className="w-4 h-4" />
                 <span>Break Seal &amp; Open Invitation</span>
               </motion.button>
+
+              <button
+                type="button"
+                onClick={handleDirectSkip}
+                className="mt-3.5 text-xs text-stone-400 hover:text-stone-700 underline underline-offset-4 font-sans cursor-pointer transition block mx-auto"
+              >
+                Or enter website directly
+              </button>
 
               <p className="text-[11px] text-stone-400 mt-4 font-sans flex items-center justify-center gap-1.5">
                 <Sparkles className="w-3 h-3 text-amber-500/70" />

@@ -8,6 +8,7 @@ import { RsvpForm } from './common/RsvpForm';
 import { PhotoLightbox } from './common/PhotoLightbox';
 import { AddToCalendar } from './common/AddToCalendar';
 import { AnimatedSection } from './common/AnimatedSection';
+import { GuestbookWall } from './common/GuestbookWall';
 import { motion } from 'motion/react';
 import { formatDate } from '@/lib/utils';
 import {
@@ -22,9 +23,12 @@ import {
   ChevronDown,
 } from 'lucide-react';
 
+import { WeddingGuest } from '@/types/rsvp';
+
 interface TemplateProps {
   wedding: WeddingProject;
   isLivePreview?: boolean;
+  guest?: WeddingGuest | null;
 }
 
 // Falling Lotus Petals Animated Background Effect
@@ -98,7 +102,7 @@ function BotanicalLotusDivider() {
   );
 }
 
-export function LotusBlossomTemplate({ wedding }: TemplateProps) {
+export function LotusBlossomTemplate({ wedding, isLivePreview = false, guest }: TemplateProps) {
   const { details } = wedding;
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -470,6 +474,14 @@ export function LotusBlossomTemplate({ wedding }: TemplateProps) {
         </AnimatedSection>
       )}
 
+      {/* Guestbook Wall */}
+      <GuestbookWall
+        coupleNames={coupleNames}
+        primaryColor="#047857"
+        accentColor="#ecfdf5"
+        isDark={false}
+      />
+
       {/* RSVP Section */}
       {details.showRsvp && (
         <section id="rsvp" className="py-20 sm:py-28 px-4 sm:px-8 max-w-3xl mx-auto relative z-20">
@@ -492,6 +504,7 @@ export function LotusBlossomTemplate({ wedding }: TemplateProps) {
               coupleNames={coupleNames}
               primaryColor="#047857"
               themeStyle="floral"
+              guest={guest}
             />
           </div>
         </section>

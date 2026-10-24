@@ -10,15 +10,19 @@ import { PhotoLightbox } from './common/PhotoLightbox';
 import { AddToCalendar } from './common/AddToCalendar';
 import { SocialShare } from './common/SocialShare';
 import { AnimatedSection } from './common/AnimatedSection';
+import { GuestbookWall } from './common/GuestbookWall';
 import { formatDate } from '@/lib/utils';
 import { Sparkles, Calendar, Clock, MapPin, Navigation, Heart } from 'lucide-react';
+
+import { WeddingGuest } from '@/types/rsvp';
 
 interface TemplateProps {
   wedding: WeddingProject;
   isLivePreview?: boolean;
+  guest?: WeddingGuest | null;
 }
 
-export function TraditionalWeddingTemplate({ wedding }: TemplateProps) {
+export function TraditionalWeddingTemplate({ wedding, isLivePreview = false, guest }: TemplateProps) {
   const { details, themeConfig } = wedding;
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -334,6 +338,16 @@ export function TraditionalWeddingTemplate({ wedding }: TemplateProps) {
         </AnimatedSection>
       )}
 
+      {/* Guestbook Wall */}
+      <AnimatedSection animation="fade-up">
+        <GuestbookWall
+          coupleNames={coupleNames}
+          primaryColor="#881337"
+          accentColor="#fff1f2"
+          isDark={false}
+        />
+      </AnimatedSection>
+
       {/* RSVP */}
       {details.showRsvp && (
         <AnimatedSection animation="fade-up" id="rsvp">
@@ -343,6 +357,7 @@ export function TraditionalWeddingTemplate({ wedding }: TemplateProps) {
               coupleNames={coupleNames}
               primaryColor={themeConfig.primaryColor || '#881337'}
               themeStyle="traditional"
+              guest={guest}
             />
           </section>
         </AnimatedSection>

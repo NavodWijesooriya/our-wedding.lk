@@ -8,6 +8,7 @@ import { RsvpForm } from './common/RsvpForm';
 import { PhotoLightbox } from './common/PhotoLightbox';
 import { AddToCalendar } from './common/AddToCalendar';
 import { AnimatedSection } from './common/AnimatedSection';
+import { GuestbookWall } from './common/GuestbookWall';
 import { motion } from 'motion/react';
 import { formatDate } from '@/lib/utils';
 import {
@@ -24,9 +25,12 @@ import {
   ChevronDown,
 } from 'lucide-react';
 
+import { WeddingGuest } from '@/types/rsvp';
+
 interface TemplateProps {
   wedding: WeddingProject;
   isLivePreview?: boolean;
+  guest?: WeddingGuest | null;
 }
 
 // Traditional Sri Lankan Brass Oil Lamp (පහන) SVG with flickering flame
@@ -104,7 +108,7 @@ function KandyanLatticeDivider() {
   );
 }
 
-export function CeylonHeritageTemplate({ wedding }: TemplateProps) {
+export function CeylonHeritageTemplate({ wedding, isLivePreview = false, guest }: TemplateProps) {
   const { details } = wedding;
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -493,6 +497,14 @@ export function CeylonHeritageTemplate({ wedding }: TemplateProps) {
         </AnimatedSection>
       )}
 
+      {/* Guestbook Wall */}
+      <GuestbookWall
+        coupleNames={coupleNames}
+        primaryColor="#d4af37"
+        accentColor="#2a040b"
+        isDark={true}
+      />
+
       {/* RSVP Section */}
       {details.showRsvp && (
         <section id="rsvp" className="py-20 sm:py-28 px-4 sm:px-8 max-w-3xl mx-auto relative z-20">
@@ -515,6 +527,7 @@ export function CeylonHeritageTemplate({ wedding }: TemplateProps) {
               coupleNames={coupleNames}
               primaryColor="#d4af37"
               themeStyle="luxury"
+              guest={guest}
             />
           </div>
         </section>

@@ -1,5 +1,5 @@
 import { WeddingProject, WeddingTemplateId } from '@/types/wedding';
-import { RsvpResponse } from '@/types/rsvp';
+import { RsvpResponse, WeddingGuest } from '@/types/rsvp';
 
 export interface TemplateDefinition {
   id: WeddingTemplateId;
@@ -410,5 +410,71 @@ export const INITIAL_DEMO_RSVPS: RsvpResponse[] = [
     dietaryRestrictions: 'Vegetarian',
     message: 'Counting down the days! Love you both to the moon and back!',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
+  },
+];
+
+export const INITIAL_DEMO_GUESTS: WeddingGuest[] = [
+  {
+    id: 'gst-1',
+    weddingId: 'demo-wedding-1',
+    name: 'Mr. & Mrs. Perera',
+    phone: '+94771234567',
+    email: 'perera.family@example.com',
+    code: 'perera-family',
+    seatsAllocated: 2,
+    status: 'attending',
+    guestCount: 2,
+    respondedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+    notes: 'Bride’s family friends • VIP Table',
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+  },
+  {
+    id: 'gst-2',
+    weddingId: 'demo-wedding-1',
+    name: 'Kasun Fernando',
+    phone: '+94719876543',
+    email: 'kasun.f@example.com',
+    code: 'kasun-fernando',
+    seatsAllocated: 1,
+    status: 'pending',
+    notes: 'University best friend of the groom',
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+  },
+  {
+    id: 'gst-3',
+    weddingId: 'demo-wedding-1',
+    name: 'Dilini & Rohan Wickramasinghe',
+    phone: '+94705551234',
+    code: 'dilini-rohan',
+    seatsAllocated: 2,
+    status: 'declined',
+    guestCount: 0,
+    notes: 'Travelling abroad during this date, sending blessing gift',
+    respondedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+  },
+  {
+    id: 'gst-4',
+    weddingId: 'demo-wedding-1',
+    name: 'Dr. Ananya Senaratne',
+    phone: '+94762233445',
+    code: 'ananya-senaratne',
+    seatsAllocated: 2,
+    status: 'pending',
+    notes: 'Honored guest & mentor',
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 4).toISOString(),
+  },
+  {
+    id: 'gst-5',
+    weddingId: 'demo-wedding-1',
+    name: 'Nipuna & Shenali Silva',
+    phone: '+94759988776',
+    code: 'nipuna-shenali',
+    seatsAllocated: 2,
+    status: 'attending',
+    guestCount: 2,
+    respondedAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
+    notes: 'Close cousins',
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
   },
 ];
